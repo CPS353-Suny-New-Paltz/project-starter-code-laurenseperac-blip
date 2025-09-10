@@ -5,8 +5,12 @@ public class UserComputeAPIPrototype implements UserComputeAPI {
 	@NetworkAPIPrototype
 	public JobResponse submitJob(JobRequest request) {
 		return new JobResponse() {
-			public boolean isSuccess() { return true; }
-			public String getMessage() { return "Prototype response"; }
+			public boolean isSuccess() { 
+				return true; 
+			}
+			public String getMessage() {
+				return "Prototype response"; 
+			}
 		};
 	}
 }
