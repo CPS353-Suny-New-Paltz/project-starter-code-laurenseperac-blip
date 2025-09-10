@@ -20,7 +20,9 @@ public class ComputeEngineAPIPrototype implements ComputeEngineAPI {
 			return -1;
 		}
 		for (int candidate = n -1; candidate > 1; candidate--) {
-			if (isPrime(candidate)) return candidate; 
+			if (isPrime(candidate)) {
+				return candidate; 
+			}
 		}
 		return -1;
 	}
