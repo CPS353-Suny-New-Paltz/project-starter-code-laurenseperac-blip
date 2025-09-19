@@ -1,16 +1,27 @@
 package network;
 
-public class UserComputeAPIPrototype implements UserComputeAPI {
-	@Override
-	@NetworkAPIPrototype
-	public JobResponse submitJob(JobRequest request) {
-		return new JobResponse() {
-			public boolean isSuccess() { 
-				return true; 
+public class UserComputeAPIPrototype {
+	
+	public void prototype(UserComputeAPI api) {
+		JobRequest request = new JobRequest() {
+			public String getInputSource() { 
+				return "input.txt"; 
 			}
-			public String getMessage() {
-				return "Prototype response"; 
+			public String getOutputDestination() { 
+				return "output.txt"; 
+			}
+			public String getDelimiter() { 
+				return ":"; 
 			}
 		};
+		
+		JobResponse response = api.submitJob(request);
+		
+		if (response.isSuccess()) {
+			System.out.println("Job submitted successfully: " + response.getMessage());
+		} else {
+			System.out.println("Job submission failed: " + response.getMessage());
+		}
+
 	}
 }
