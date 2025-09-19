@@ -16,5 +16,4 @@ public class ComputeEngineAPIPrototype {
 		System.out.println("Largest prime smaller than input: " + result.getOutput());
 		
 	}
-	
 }

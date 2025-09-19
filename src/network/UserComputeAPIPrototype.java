@@ -22,6 +22,6 @@ public class UserComputeAPIPrototype {
 		} else {
 			System.out.println("Job submission failed: " + response.getMessage());
 		}
-		
+
 	}
 }
