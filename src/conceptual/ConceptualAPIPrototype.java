@@ -1,5 +1,5 @@
 package conceptual;
 
-public @interface ConceptualAPIPrototype {
+public interface ConceptualAPIPrototype {
 
 }
