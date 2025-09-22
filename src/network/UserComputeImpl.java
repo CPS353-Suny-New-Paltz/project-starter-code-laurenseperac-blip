@@ -12,6 +12,6 @@ public class UserComputeImpl implements UserComputeAPI{
 
 	@Override
 	public JobResponse submitJob(JobRequest request) {
-		return new JobResponseImpl(false, "unimplemented");
+		return new JobResponseImpl(true, "unimplemented");
 	}
 }
