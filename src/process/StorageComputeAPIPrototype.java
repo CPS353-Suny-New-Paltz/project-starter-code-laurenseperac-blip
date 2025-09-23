@@ -1,7 +1,10 @@
 package process;
 
+import project.annotations.ProcessAPIPrototype;
+
 public class StorageComputeAPIPrototype {
 	
+	@ProcessAPIPrototype
 	public void prototype(StorageComputeAPI storage) {
 		DataValue input = storage.readInput(null);
 		
