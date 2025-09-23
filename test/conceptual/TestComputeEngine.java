@@ -9,13 +9,13 @@ public class TestComputeEngine {
 	@Test
 	void testPerformComputationWithMock() {
 		ComputeRequest mockRequest = mock(ComputeRequest.class);
-		when(mockRequest.getInput()).thenReturn(50);
+		when(mockRequest.getInput()).thenReturn(5);
 
 		ComputeEngineAPI engine = new ComputeEngineImpl(null);
 		ComputeResult result = engine.performComputation(mockRequest);
 
 		assertNotNull(result);
-		assertEquals(-1, result.getOutput());
+		assertEquals(3, result.getOutput());
 	}
 
 }
