@@ -6,5 +6,4 @@ import project.annotations.ProcessAPI;
 public interface StorageComputeAPI {
 	DataValue readInput(String source);
 	boolean writeOutput(String destination, DataValue data);
-
 }
