@@ -5,6 +5,8 @@ import project.annotations.ConceptualAPIPrototype;
 public class ComputeEngineAPIPrototype {
 
 	@ConceptualAPIPrototype
+public class ComputeEngineAPIPrototype {
+	
 	public void prototype(ComputeEngineAPI engine) {
 		ComputeRequest request = new ComputeRequest() {
 			@Override

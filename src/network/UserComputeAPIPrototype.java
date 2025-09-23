@@ -5,10 +5,17 @@ import project.annotations.NetworkAPIPrototype;
 public class UserComputeAPIPrototype {
 	
 	@NetworkAPIPrototype
+
+public class UserComputeAPIPrototype {
+	
 	public void prototype(UserComputeAPI api) {
 		JobRequest request = new JobRequest() {
 			public String getInputSource() { 
 				return "input.txt"; 
+			}
+			public String getOutputDestination() { 
+				return "output.txt"; 
+			}
 			}
 			public String getOutputDestination() { 
 				return "output.txt"; 
