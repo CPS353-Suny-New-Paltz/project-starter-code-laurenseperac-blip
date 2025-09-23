@@ -1,7 +1,10 @@
 package network;
 
+import project.annotations.NetworkAPIPrototype;
+
 public class UserComputeAPIPrototype {
 	
+	@NetworkAPIPrototype
 	public void prototype(UserComputeAPI api) {
 		JobRequest request = new JobRequest() {
 			public String getInputSource() { 
