@@ -1,12 +1,9 @@
 package conceptual;
 import project.annotations.ConceptualAPIPrototype;
 
-
-public class ComputeEngineAPIPrototype {
-
-	@ConceptualAPIPrototype
 public class ComputeEngineAPIPrototype {
 	
+	@ConceptualAPIPrototype
 	public void prototype(ComputeEngineAPI engine) {
 		ComputeRequest request = new ComputeRequest() {
 			@Override
