@@ -28,7 +28,6 @@ public class TestStatusCheckPR {
     
    // @Test
     public void testPullRequest() throws Exception {
-  
         String baseApiPath = getBaseApiPath();
         String toCurl = baseApiPath + "pulls?state=all";
         String pullRequests = curl(toCurl);
@@ -45,6 +44,7 @@ public class TestStatusCheckPR {
             }
         }
         Assertions.assertTrue(foundPullRequest, "No pull request with required status checks (failure, then success) and reviewer approval found");
+    } 
     
     // query the git remote to find the repo URL
     private String getBaseApiPath() throws Exception {
