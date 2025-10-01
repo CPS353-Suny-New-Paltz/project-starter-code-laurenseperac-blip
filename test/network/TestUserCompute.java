@@ -18,7 +18,7 @@ public class TestUserCompute {
 		when(mockRequest.getOutputDestination()).thenReturn("output.txt");
 		when(mockRequest.getDelimiter()).thenReturn(",");
 
-		UserComputeAPI api = new UserComputeImpl(null);
+		UserComputeAPI api = new UserComputeImpl(null, null);
 		JobResponse response = api.submitJob(mockRequest);
 
 		assertNotNull(response);
