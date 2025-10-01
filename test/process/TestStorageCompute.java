@@ -1,6 +1,5 @@
 package process;
 
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -13,8 +12,6 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
-@Tag("skip")
 public class TestStorageCompute {
 
 	@Test
