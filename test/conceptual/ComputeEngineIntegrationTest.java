@@ -32,7 +32,7 @@ public class ComputeEngineIntegrationTest {
 
 		ComputeEngineAPI engine = new ComputeEngineImpl(null);
 		
-		UserComputeAPI user = new UserComputeImpl(null);
+		UserComputeAPI user = new UserComputeImpl(null, null);
 
 		while (!inputConfig.getInput().isEmpty()) {
 			DataValue val = store.readInput(null);
