@@ -12,7 +12,7 @@ public class TestStorageCompute {
 
 	@Test
 	void testReadWrite() {
-		StorageComputeAPI storage = new StorageComputeImpl(null);
+		StorageComputeAPI storage = new StorageComputeImpl();
 		DataValue input = storage.readInput("inputKey");
 
 		assertNotNull(input);
