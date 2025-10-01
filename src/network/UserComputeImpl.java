@@ -7,9 +7,7 @@ import process.DataValue;
 import process.DataValueImpl;
 import process.StorageComputeAPI;
 import project.annotations.NetworkAPI;
-import network.UserComputeAPI;
-import network.JobRequest;
-import network.JobResponse;
+
 
 
 @NetworkAPI
@@ -62,3 +60,5 @@ public class UserComputeImpl implements UserComputeAPI{
 				}
 			};
 		}
+	}
+}
