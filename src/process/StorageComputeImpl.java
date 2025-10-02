@@ -32,15 +32,14 @@ public class StorageComputeImpl implements StorageComputeAPI {
             Path path = Paths.get(filePath);
             String existing = "";
             if (Files.exists(path)) {
-                existing = Files.readString(path);
+                existing = Files.readString(path).trim();
             }
 
             String newContent = existing.isEmpty() ? String.valueOf(data.getValue())
-                    : existing + "," + data.getValue();
+                                                   : existing + "," + data.getValue();
 
             Files.writeString(path, newContent);
             return true;
-
         } catch (IOException e) {
             throw new RuntimeException("Error writing output file: " + e.getMessage(), e);
         }
