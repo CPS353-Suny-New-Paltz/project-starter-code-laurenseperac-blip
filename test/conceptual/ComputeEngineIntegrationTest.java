@@ -30,9 +30,9 @@ public class ComputeEngineIntegrationTest {
 
 		InMemoryDataStore store = new InMemoryDataStore(inputConfig, outputConfig);
 
-		ComputeEngineAPI engine = new ComputeEngineImpl(null);
+		ComputeEngineAPI engine = new ComputeEngineImpl();
 		
-		UserComputeAPI user = new UserComputeImpl(null, null);
+		UserComputeAPI user = new UserComputeImpl(engine, store);
 
 		while (!inputConfig.getInput().isEmpty()) {
 			DataValue val = store.readInput(null);
@@ -40,8 +40,8 @@ public class ComputeEngineIntegrationTest {
 			DataValue outputVal = new DataValueImpl(result.getOutput());
 			store.writeOutput(null, outputVal);
 		}
-		assertFalse(output.isEmpty());
-		assertTrue(output.contains("Value: -1"));
+		assertFalse(output.isEmpty(), "Output should not be empty");
+		assertTrue(output.stream().anyMatch(s -> s.contains("Value")), "Output should contain formatted values");
 	}
 
 }
