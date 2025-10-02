@@ -1,7 +1,13 @@
 package process;
 
-import java.io.*;
-import java.nio.file.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class StorageComputeImpl implements StorageComputeAPI {
 
@@ -9,25 +15,27 @@ public class StorageComputeImpl implements StorageComputeAPI {
     public DataValue readInput(String filePath) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line = reader.readLine();
-            if (line == null) return null;
+            if (line == null) {
+                return null;
+            }
             return new DataValueImpl(Integer.parseInt(line.trim()));
         } catch (IOException | NumberFormatException e) {
-            return null;
+            return null; 
         }
     }
 
     @Override
     public boolean writeOutput(String filePath, DataValue data) {
         try {
-            String existing = "";
             Path path = Paths.get(filePath);
+            String existing = "";
             if (Files.exists(path)) {
                 existing = Files.readString(path);
             }
 
-            String newContent = existing.isEmpty() ? 
-                                String.valueOf(data.getValue()) : 
-                                existing + "," + data.getValue();
+            String newContent = existing.isEmpty()
+                    ? String.valueOf(data.getValue())
+                    : existing + "," + data.getValue();
 
             Files.writeString(path, newContent);
             return true;
