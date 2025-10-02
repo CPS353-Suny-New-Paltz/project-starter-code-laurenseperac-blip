@@ -27,7 +27,9 @@ public class ManualTestingFramework {
 
             int iterations = 0;
             while (true) {
-                if (iterations++ >= MAX_ITERATIONS) break; 
+                if (iterations++ >= MAX_ITERATIONS) {
+                	break; 
+                }
 
                 DataValue inputVal;
                 try {
