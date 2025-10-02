@@ -11,7 +11,9 @@ public class StorageComputeImpl implements StorageComputeAPI {
     public DataValue readInput(String filePath) {
         try (var reader = new java.io.BufferedReader(new java.io.FileReader(filePath))) {
             String line = reader.readLine();
-            if (line == null) return null;
+            if (line == null) {
+            	return null;
+            }
             return new DataValueImpl(Integer.parseInt(line.trim()));
         } catch (Exception e) {
             return null;
