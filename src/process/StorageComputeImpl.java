@@ -1,51 +1,39 @@
 package process;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.*;
 
 public class StorageComputeImpl implements StorageComputeAPI {
 
-	@Override
-	public DataValue readInput(String filePath) {
-		try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-			String line = reader.readLine();
-			int value = Integer.parseInt(line.trim());
-			return new DataValueImpl(value);
-		} catch (IOException | NumberFormatException e) {
-			throw new RuntimeException("Error reading input file: " + e.getMessage(), e);
-		}
-	}
+    @Override
+    public DataValue readInput(String filePath) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line = reader.readLine();
+            if (line == null) return null;
+            return new DataValueImpl(Integer.parseInt(line.trim()));
+        } catch (IOException | NumberFormatException e) {
+            return null;
+        }
+    }
 
-	@Override
-	public boolean writeOutput(String filePath, DataValue data) {
-	    try {
-	        String existing = "";
-	        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-	            existing = reader.readLine(); 
-	        } catch (IOException e) {
-	        	System.out.println("No existing output file found");
-	        }
+    @Override
+    public boolean writeOutput(String filePath, DataValue data) {
+        try {
+            String existing = "";
+            Path path = Paths.get(filePath);
+            if (Files.exists(path)) {
+                existing = Files.readString(path);
+            }
 
-	        String newContent;
-	        if (existing == null || existing.isEmpty()) {
-	            newContent = String.valueOf(data.getValue());
-	        } else {
-	            newContent = existing + "," + data.getValue();
-	        }
+            String newContent = existing.isEmpty() ? 
+                                String.valueOf(data.getValue()) : 
+                                existing + "," + data.getValue();
 
-	        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-	            writer.write(newContent);
-	        }
+            Files.writeString(path, newContent);
+            return true;
 
-	        return true;
-
-	    } catch (IOException e) {
-	        throw new RuntimeException("Error writing output file " + e.getMessage(), e);
-	    }
-	}
-
-
+        } catch (IOException e) {
+            throw new RuntimeException("Error writing output file: " + e.getMessage(), e);
+        }
+    }
 }
