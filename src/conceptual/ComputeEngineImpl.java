@@ -12,7 +12,7 @@ public class ComputeEngineImpl implements ComputeEngineAPI {
     }
 
 	public ComputeEngineImpl(ComputeEngineAPI computeEngine) {
-		this.computeEngine = computeEngine;
+		this.computeEngine = null;
 	}
 
 	@Override
