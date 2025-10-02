@@ -26,12 +26,16 @@ public class ManualTestingFramework {
                     java.nio.file.Paths.get(INPUT)
             );
 
-            if (inputLines.isEmpty()) return;
+            if (inputLines.isEmpty()) {
+            	return;
+            }
 
             StringBuilder outputLine = new StringBuilder();
 
             for (String line : inputLines) {
-                if (iterations++ >= MAX_ITERATIONS) break;
+                if (iterations++ >= MAX_ITERATIONS) {
+                	break;
+                }
 
                 int val;
                 try {
@@ -43,7 +47,9 @@ public class ManualTestingFramework {
                 ComputeRequest request = new ComputeRequestImpl(val);
                 ComputeResult result = engine.performComputation(request);
 
-                if (outputLine.length() > 0) outputLine.append(",");
+                if (outputLine.length() > 0) {
+                	outputLine.append(",");
+                }
                 outputLine.append(result.getOutput());
             }
 
