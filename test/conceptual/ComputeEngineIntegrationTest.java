@@ -1,6 +1,5 @@
 package conceptual;
 
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import process.DataValue;
 import process.DataValueImpl;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Tag("skip")
 public class ComputeEngineIntegrationTest {
 
 	@Test
