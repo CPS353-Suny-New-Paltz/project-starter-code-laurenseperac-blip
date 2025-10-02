@@ -6,6 +6,10 @@ import project.annotations.ConceptualAPI;
 public class ComputeEngineImpl implements ComputeEngineAPI {
 
 	private final ComputeEngineAPI computeEngine;
+	
+	public ComputeEngineImpl() {
+        this.computeEngine = null;
+    }
 
 	public ComputeEngineImpl(ComputeEngineAPI computeEngine) {
 		this.computeEngine = computeEngine;
