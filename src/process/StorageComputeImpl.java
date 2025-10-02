@@ -25,7 +25,8 @@ public class StorageComputeImpl implements StorageComputeAPI {
 	        String existing = "";
 	        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
 	            existing = reader.readLine(); 
-	        } catch (IOException ignored) {
+	        } catch (IOException e) {
+	        	System.out.println("No existing output file found");
 	        }
 
 	        String newContent;
