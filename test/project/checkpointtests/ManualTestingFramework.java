@@ -41,22 +41,20 @@ public class ManualTestingFramework {
 
             List<String> results = new ArrayList<>();
 
-            DataValue inputVal;
             while (true) {
+            	DataValue inputVal;
                 try {
                     inputVal = storage.readInput(INPUT);
                 } catch (RuntimeException e) {
                     break;
                 }
-
-                if (inputVal == null) {
-                	break;
-                }
+                if (inputVal == null) break;
 
                 ComputeRequest request = new ComputeRequestImpl(inputVal.getValue());
                 ComputeResult result = engine.performComputation(request);
 
-                results.add(String.valueOf(result.getOutput()));
+                // Write the output immediately for each input
+                storage.writeOutput(OUTPUT, new DataValueImpl(result.getOutput()));
             }
 
             String joined = String.join(",", results);
