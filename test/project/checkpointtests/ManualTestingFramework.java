@@ -49,7 +49,9 @@ public class ManualTestingFramework {
                     break;
                 }
 
-                if (inputVal == null) break;
+                if (inputVal == null) {
+                	break;
+                }
 
                 ComputeRequest request = new ComputeRequestImpl(inputVal.getValue());
                 ComputeResult result = engine.performComputation(request);
