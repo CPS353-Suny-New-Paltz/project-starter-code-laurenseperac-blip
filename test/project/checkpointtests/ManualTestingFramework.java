@@ -13,9 +13,11 @@ import process.DataValue;
 import process.DataValueImpl;
 
 public class ManualTestingFramework {
-    
+
     public static final String INPUT = "manualTestInput.txt";
     public static final String OUTPUT = "manualTestOutput.txt";
+
+    private static final int MAX_ITERATIONS = 100;
 
     public static void main(String[] args) {
         try {
@@ -23,7 +25,10 @@ public class ManualTestingFramework {
             StorageComputeAPI storage = new StorageComputeImpl();
             UserComputeAPI user = new UserComputeImpl(engine, storage);
 
+            int iterations = 0;
             while (true) {
+                if (iterations++ >= MAX_ITERATIONS) break; 
+
                 DataValue inputVal;
                 try {
                     inputVal = storage.readInput(INPUT);
@@ -31,7 +36,7 @@ public class ManualTestingFramework {
                     break;
                 }
                 if (inputVal == null) {
-                	break;
+                    break;
                 }
 
                 ComputeRequest request = new ComputeRequestImpl(inputVal.getValue());
