@@ -21,12 +21,30 @@ public class StorageComputeImpl implements StorageComputeAPI {
 
 	@Override
 	public boolean writeOutput(String filePath, DataValue data) {
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-			writer.write(String.valueOf(data.getValue()));
-			return true;
-		} catch (IOException e) {
-			throw new RuntimeException("Error writing output file " + e.getMessage(), e);
-		}
+	    try {
+	        String existing = "";
+	        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+	            existing = reader.readLine(); 
+	        } catch (IOException ignored) {
+	        }
+
+	        String newContent;
+	        if (existing == null || existing.isEmpty()) {
+	            newContent = String.valueOf(data.getValue());
+	        } else {
+	            newContent = existing + "," + data.getValue();
+	        }
+
+	        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+	            writer.write(newContent);
+	        }
+
+	        return true;
+
+	    } catch (IOException e) {
+	        throw new RuntimeException("Error writing output file " + e.getMessage(), e);
+	    }
 	}
+
 
 }
