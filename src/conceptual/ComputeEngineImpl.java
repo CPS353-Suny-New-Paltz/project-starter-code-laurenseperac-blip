@@ -8,7 +8,7 @@ public class ComputeEngineImpl implements ComputeEngineAPI {
 	private final ComputeEngineAPI computeEngine;
 
 	public ComputeEngineImpl(ComputeEngineAPI computeEngine) {
-		this.computeEngine = computeEngine;
+		this.computeEngine = null;
 	}
 
 	@Override
