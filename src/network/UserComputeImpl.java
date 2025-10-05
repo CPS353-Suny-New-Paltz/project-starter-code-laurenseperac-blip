@@ -16,49 +16,45 @@ public class UserComputeImpl implements UserComputeAPI{
 	private final StorageComputeAPI storage;
 
 	public UserComputeImpl(ComputeEngineAPI engine, StorageComputeAPI storage) {
+		if (engine == null || storage == null) {
+			throw new IllegalArgumentException("Engine and storage must not be null");
+		}
 		this.engine = engine;
 		this.storage = storage;
 	}
 
 	@Override
 	public JobResponse submitJob(JobRequest request) {
+		if (request == null) {
+			return new JobResponseImpl(false, "Invalid job request: null");
+		}
+		if (request.getInputSource() == null || request.getOutputDestination() == null) {
+			return new JobResponseImpl(false, "Invalid file paths in request");
+		}
+		
 		try {
-			//reads ints from storage
 			DataValue inputVal = storage.readInput(request.getInputSource());
+			if (inputVal == null) {
+				return new JobResponseImpl(false, "Input file not found");
+			}
 			
-			//pass to compute engine
 			ComputeRequest compReq = () -> inputVal.getValue();
 			ComputeResult compRes = engine.performComputation(compReq);
+			if (compRes == null || compRes.getOutput() == -1) {
+				return new JobResponseImpl(false, "Computation failed or invalid input");
+			}
 			
-			//write to storage
 			DataValue outputVal = new DataValueImpl(compRes.getOutput());
-			storage.writeOutput(request.getOutputDestination(), outputVal);
-			
-			//return status
-			return new JobResponse() {
-				@Override
-				public boolean isSuccess() {
-					return true;
-				}
-				@Override
-				public String getMessage() {
-					return "Job completed successfully";
-				}
-			};
-			
+			boolean success = storage.writeOutput(request.getOutputDestination(), outputVal);
+			if (!success) {
+				return new JobResponseImpl(false, "Output write failed");
+			}
+			return new JobResponseImpl(true, "Job completed successfully");
+		
+		} catch (RuntimeException e) {
+			return new JobResponseImpl(false, "Unexpected runtime error: " + e.getMessage());
 		} catch (Exception e) {
-			return new JobResponse() {
-				
-				@Override
-				public boolean isSuccess() {
-					return false;
-				}
-				
-				@Override
-				public String getMessage() {
-					return "Job failed";
-				}
-			};
+			return new JobResponseImpl(false, "Job failed: " + e.getMessage());
 		}
 	}
 }
