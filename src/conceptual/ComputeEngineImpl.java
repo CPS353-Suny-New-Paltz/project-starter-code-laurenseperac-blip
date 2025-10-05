@@ -12,18 +12,28 @@ public class ComputeEngineImpl implements ComputeEngineAPI {
     }
 
 	public ComputeEngineImpl(ComputeEngineAPI computeEngine) {
-		this.computeEngine = null;
+		this.computeEngine = computeEngine;
 	}
 
 	@Override
 	public ComputeResult performComputation(ComputeRequest request) {
-		int n = request.getInput();
-		for(int candidate = n -1; candidate >= 2; candidate--) {
-			if (isPrime(candidate)) {
-				return new ComputeResultImpl(candidate);
-			}
+		if (request == null) {
+			return new ComputeResultImpl(-1);
 		}
-		return new ComputeResultImpl(-1); 
+		try {
+			int n = request.getInput();
+			if (n <= 2) {
+				return new ComputeResultImpl(-1);
+			}
+			for (int candidate = n - 1; candidate >= 2; candidate--) {
+				if (isPrime(candidate)) {
+					return new ComputeResultImpl(candidate);
+				}
+			}
+			return new ComputeResultImpl(-1);
+		} catch (Exception e) {
+			return new ComputeResultImpl(-1);
+		}
 	}
 	
 	private boolean isPrime(int x) {
