@@ -1,9 +1,13 @@
 package process;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StorageComputeImpl implements StorageComputeAPI {
 
@@ -36,4 +40,38 @@ public class StorageComputeImpl implements StorageComputeAPI {
             throw new RuntimeException("Error writing output file: " + e.getMessage(), e);
         }
     }
+
+	@Override
+	public MultiDataValue readAllInputs(String filePath) {
+		List<Integer> numbers = new ArrayList<>();
+		try(BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				String[] parts = line.split("[,\\s]+");
+				for (String p: parts) {
+					if (!p.isBlank()) {
+						numbers.add(Integer.parseInt(p.trim()));
+					}
+				}
+			}
+		} catch (IOException e) {
+			throw new RuntimeException("Error reading input file: " + e.getMessage(), e);
+		}
+		return new MultiDataValueImpl(numbers);
+	}
+
+	@Override
+	public boolean writeAllOutputs(String filePath, List<Integer> values) {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+			for (int i = 0; i < values.size(); i++) {
+				writer.write(String.valueOf(values.get(i)));
+				if (i < values.size() - 1) {
+					writer.write(",");
+				}
+				return true;
+			} catch (IOException e) {
+				throw new RuntimeException("Error writing output file: " + e.getMessage(), e);
+			}
+		}
+	}
 }
