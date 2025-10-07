@@ -61,17 +61,15 @@ public class StorageComputeImpl implements StorageComputeAPI {
 	}
 
 	@Override
-	public boolean writeAllOutputs(String filePath, List<Integer> values) {
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-			for (int i = 0; i < values.size(); i++) {
-				writer.write(String.valueOf(values.get(i)));
-				if (i < values.size() - 1) {
-					writer.write(",");
-				}
-				return true;
-			} catch (IOException e) {
-				throw new RuntimeException("Error writing output file: " + e.getMessage(), e);
-			}
-		}
-	}
+    public boolean writeAllOutputs(String filePath, List<Integer> values) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            for (int i = 0; i < values.size(); i++) {
+                writer.write(String.valueOf(values.get(i)));
+                if (i < values.size() - 1) writer.write(",");
+            }
+            return true;
+        } catch (IOException e) {
+            throw new RuntimeException("Error writing output file: " + e.getMessage(), e);
+        }
+    }
 }
