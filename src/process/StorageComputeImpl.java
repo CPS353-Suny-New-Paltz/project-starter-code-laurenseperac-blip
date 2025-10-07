@@ -65,7 +65,9 @@ public class StorageComputeImpl implements StorageComputeAPI {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             for (int i = 0; i < values.size(); i++) {
                 writer.write(String.valueOf(values.get(i)));
-                if (i < values.size() - 1) writer.write(",");
+                if (i < values.size() - 1) { 
+                	writer.write(",");
+                }
             }
             return true;
         } catch (IOException e) {
