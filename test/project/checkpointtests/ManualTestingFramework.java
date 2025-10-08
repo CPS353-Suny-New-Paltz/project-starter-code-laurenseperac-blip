@@ -16,6 +16,10 @@ import network.UserComputeAPI;
 
 
 public class ManualTestingFramework {
+	
+	public static final String INPUT = "numbers.txt";
+	public static final String OUTPUT = "output.txt";
+	
 	public static void main(String[] args) {
 		StorageComputeAPI storage = new StorageComputeImpl();
 		ComputeEngineAPI engine = new ComputeEngineImpl();
