@@ -33,10 +33,10 @@ public class ComputeEngineIntegrationTest {
 		UserComputeAPI user = new UserComputeImpl(engine, store);
 
 		while (!inputConfig.getInput().isEmpty()) {
-			DataValue val = store.readInput(null);
+			DataValue val = store.readInput("input");
 			ComputeResult result = engine.performComputation(() -> val.getValue());
 			DataValue outputVal = new DataValueImpl(result.getOutput());
-			store.writeOutput(null, outputVal);
+			store.writeOutput("output", outputVal);
 		}
 		assertFalse(output.isEmpty(), "Output should not be empty");
 		assertTrue(output.stream().anyMatch(s -> s.contains("Value")), "Output should contain formatted values");
