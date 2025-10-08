@@ -16,14 +16,16 @@ import network.UserComputeAPI;
 
 
 public class ManualTestingFramework {
+	public static void main(String[] args) {
+		StorageComputeAPI storage = new StorageComputeImpl();
+		ComputeEngineAPI engine = new ComputeEngineImpl();
+		UserComputeAPI userAPI = new UserComputeImpl(engine, storage);
+	    
+		JobRequest job = new JobRequestImpl("numbers.txt", "output.txt", ",");
+		JobResponse response = userAPI.submitJob(job);
+		
+		System.out.println("Job success: " + response.isSuccess());
+		System.out.println("Message: " + response.getMessage());
 
-	StorageComputeAPI storage = new StorageComputeImpl();
-	ComputeEngineAPI engine = new ComputeEngineImpl();
-	UserComputeAPI userAPI = new UserComputeImpl(engine, storage);
-    
-	JobRequest job = new JobRequestImpl("numbers.txt", "output.txt", ",");
-	JobResponse response = userAPI.submitJob(job);
-	
-	System.out.println("Job success: " + response.isSuccess());
-	System.out.println("Message: " + response.getMessage());
+	}
 }
