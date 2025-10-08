@@ -1,5 +1,7 @@
 package integrationinfra;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 import process.DataValue;
@@ -52,18 +54,12 @@ public class InMemoryDataStore implements StorageComputeAPI {
 
 	@Override
 	public boolean writeAllOutputs(String filePath, List<Integer> values) {
-		try {
-	        java.nio.file.Path path = java.nio.file.Paths.get(filePath);
-	        java.nio.file.Files.createDirectories(path.getParent() != null ? path.getParent() : java.nio.file.Paths.get("."));
-	        java.util.List<String> lines = new java.util.ArrayList<>();
-	        for (Integer val : values) {
-	            lines.add("Value " + val);
+		try (PrintWriter writer = new PrintWriter(filePath)) {
+	        for (int v : values) {
+	            writer.println(v);
 	        }
-	        java.nio.file.Files.write(path, lines);
-	        outputConfig.getOutput().addAll(lines);
 	        return true;
-	    } catch (Exception e) {
-	        e.printStackTrace();
+	    } catch (IOException e) {
 	        return false;
 	    }
 	}
