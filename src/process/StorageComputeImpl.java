@@ -26,13 +26,16 @@ public class StorageComputeImpl implements StorageComputeAPI {
 
     @Override
     public boolean writeOutput(String filePath, DataValue data) {
-        try {
+    	try {
             File file = new File(filePath);
+            if (file.getParentFile() != null) {
+                file.getParentFile().mkdirs(); // create directories if needed
+            }
+
             boolean appendComma = file.exists() && file.length() > 0;
+
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
-                if (appendComma) {
-                    writer.write(",");
-                }
+                if (appendComma) writer.write(",");
                 writer.write(String.valueOf(data.getValue()));
             }
             return true;
@@ -62,16 +65,19 @@ public class StorageComputeImpl implements StorageComputeAPI {
 
 	@Override
     public boolean writeAllOutputs(String filePath, List<Integer> values) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            for (int i = 0; i < values.size(); i++) {
-                writer.write(String.valueOf(values.get(i)));
-                if (i < values.size() - 1) { 
-                	writer.write(",");
-                }
-            }
-            return true;
-        } catch (IOException e) {
-            throw new RuntimeException("Error writing output file: " + e.getMessage(), e);
-        }
+		 try {
+	            File file = new File(filePath);
+	            if (file.getParentFile() != null) file.getParentFile().mkdirs(); 
+
+	            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+	                for (int i = 0; i < values.size(); i++) {
+	                    writer.write(String.valueOf(values.get(i)));
+	                    if (i < values.size() - 1) writer.write(","); 
+	                }
+	            }
+	            return true;
+	        } catch (IOException e) {
+	            throw new RuntimeException("Error writing output file: " + e.getMessage(), e);
+	        }
     }
 }
