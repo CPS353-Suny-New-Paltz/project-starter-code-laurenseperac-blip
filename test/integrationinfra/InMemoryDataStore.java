@@ -30,6 +30,7 @@ public class InMemoryDataStore implements StorageComputeAPI {
 	public boolean writeOutput(String destination, DataValue data) {
 		try {
 	        java.nio.file.Path path = java.nio.file.Paths.get(destination);
+	        java.nio.file.Files.createDirectories(path.getParent() != null ? path.getParent() : java.nio.file.Paths.get("."));
 	        String line = "Value " + data.getValue();
 	        java.nio.file.Files.write(path, java.util.List.of(line));
 	        outputConfig.getOutput().add(line);
@@ -53,11 +54,13 @@ public class InMemoryDataStore implements StorageComputeAPI {
 	public boolean writeAllOutputs(String filePath, List<Integer> values) {
 		try {
 	        java.nio.file.Path path = java.nio.file.Paths.get(filePath);
+	        java.nio.file.Files.createDirectories(path.getParent() != null ? path.getParent() : java.nio.file.Paths.get("."));
 	        java.util.List<String> lines = new java.util.ArrayList<>();
 	        for (Integer val : values) {
 	            lines.add("Value " + val);
 	        }
 	        java.nio.file.Files.write(path, lines);
+	        outputConfig.getOutput().addAll(lines);
 	        return true;
 	    } catch (Exception e) {
 	        e.printStackTrace();
