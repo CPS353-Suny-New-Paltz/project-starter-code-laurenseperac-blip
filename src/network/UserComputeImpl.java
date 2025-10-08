@@ -33,11 +33,14 @@ public class UserComputeImpl implements UserComputeAPI{
 	        return new JobResponseImpl(false, "Invalid file paths in request");
 	    }
 
+	    int maxIterations = 10000;
+	    int count = 0;
+	    boolean anyWritten = false;
+	    
 	    try {
 	        DataValue inputVal;
-	        boolean anyWritten = false;
 
-	        while ((inputVal = storage.readInput(request.getInputSource())) != null) {
+	        while ((inputVal = storage.readInput(request.getInputSource())) != null && count++ < maxIterations) {
 	            final DataValue currentVal = inputVal; 
 	            ComputeRequest compReq = () -> currentVal.getValue(); 
 	            ComputeResult compRes = engine.performComputation(compReq);

@@ -36,7 +36,7 @@ public class ComputeEngineIntegrationTest {
 
 		while (!inputConfig.getInput().isEmpty() && count++ < maxIterations) {
 			DataValue val = store.readInput("input");
-			if (val.getValue() == -1) {
+			if (val == null || val.getValue() == -1) {
 				break;
 			}
 			
