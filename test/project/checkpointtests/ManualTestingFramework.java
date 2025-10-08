@@ -25,7 +25,7 @@ public class ManualTestingFramework {
 		ComputeEngineAPI engine = new ComputeEngineImpl();
 		UserComputeAPI userAPI = new UserComputeImpl(engine, storage);
 	    
-		JobRequest job = new JobRequestImpl("numbers.txt", "output.txt", ",");
+		JobRequest job = new JobRequestImpl(INPUT, OUTPUT, ",");
 		JobResponse response = userAPI.submitJob(job);
 		
 		System.out.println("Job success: " + response.isSuccess());

@@ -29,11 +29,17 @@ public class ComputeEngineIntegrationTest {
 		InMemoryDataStore store = new InMemoryDataStore(inputConfig, outputConfig);
 
 		ComputeEngineAPI engine = new ComputeEngineImpl();
-		
 		UserComputeAPI user = new UserComputeImpl(engine, store);
+		
+		int maxIterations = 1000;
+		int count = 0;
 
-		while (!inputConfig.getInput().isEmpty()) {
+		while (!inputConfig.getInput().isEmpty() && count++ < maxIterations) {
 			DataValue val = store.readInput("input");
+			if (val.getValue() == -1) {
+				break;
+			}
+			
 			ComputeResult result = engine.performComputation(() -> val.getValue());
 			DataValue outputVal = new DataValueImpl(result.getOutput());
 			store.writeOutput("output", outputVal);
