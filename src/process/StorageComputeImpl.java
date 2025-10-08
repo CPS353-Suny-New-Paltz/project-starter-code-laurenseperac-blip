@@ -69,7 +69,9 @@ public class StorageComputeImpl implements StorageComputeAPI {
     public boolean writeAllOutputs(String filePath, List<Integer> values) {
 		 try {
 	            File file = new File(filePath);
-	            if (file.getParentFile() != null) file.getParentFile().mkdirs(); 
+	            if (file.getParentFile() != null) {
+	            	file.getParentFile().mkdirs(); 
+	            }
 
 	            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 	                for (int i = 0; i < values.size(); i++) {
