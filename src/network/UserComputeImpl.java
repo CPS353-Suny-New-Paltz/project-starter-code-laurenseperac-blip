@@ -25,36 +25,45 @@ public class UserComputeImpl implements UserComputeAPI{
 
 	@Override
 	public JobResponse submitJob(JobRequest request) {
-		if (request == null) {
-			return new JobResponseImpl(false, "Invalid job request: null");
-		}
-		if (request.getInputSource() == null || request.getOutputDestination() == null) {
-			return new JobResponseImpl(false, "Invalid file paths in request");
-		}
-		
-		try {
-			DataValue inputVal = storage.readInput(request.getInputSource());
-			if (inputVal == null) {
-				return new JobResponseImpl(false, "Input file not found");
-			}
-			
-			ComputeRequest compReq = () -> inputVal.getValue();
-			ComputeResult compRes = engine.performComputation(compReq);
-			if (compRes == null || compRes.getOutput() == -1) {
-				return new JobResponseImpl(false, "Computation failed or invalid input");
-			}
-			
-			DataValue outputVal = new DataValueImpl(compRes.getOutput());
-			boolean success = storage.writeOutput(request.getOutputDestination(), outputVal);
-			if (!success) {
-				return new JobResponseImpl(false, "Output write failed");
-			}
-			return new JobResponseImpl(true, "Job completed successfully");
-		
-		} catch (RuntimeException e) {
-			return new JobResponseImpl(false, "Unexpected runtime error: " + e.getMessage());
-		} catch (Exception e) {
-			return new JobResponseImpl(false, "Job failed: " + e.getMessage());
-		}
+	    if (request == null) {
+	        return new JobResponseImpl(false, "Invalid job request: null");
+	    }
+
+	    if (request.getInputSource() == null || request.getOutputDestination() == null) {
+	        return new JobResponseImpl(false, "Invalid file paths in request");
+	    }
+
+	    try {
+	        DataValue inputVal;
+	        boolean anyWritten = false;
+
+	        while ((inputVal = storage.readInput(request.getInputSource())) != null) {
+	            final DataValue currentVal = inputVal; 
+	            ComputeRequest compReq = () -> currentVal.getValue(); 
+	            ComputeResult compRes = engine.performComputation(compReq);
+
+	            if (compRes == null || compRes.getOutput() == -1) {
+	                continue; 
+	            }
+
+	            DataValue outputVal = new DataValueImpl(compRes.getOutput());
+	            boolean success = storage.writeOutput(request.getOutputDestination(), outputVal);
+	            if (!success) {
+	                return new JobResponseImpl(false, "Output write failed");
+	            }
+	            anyWritten = true;
+	        }
+
+	        if (!anyWritten) {
+	            return new JobResponseImpl(false, "No valid inputs processed");
+	        }
+
+	        return new JobResponseImpl(true, "Job completed successfully");
+
+	    } catch (RuntimeException e) {
+	        return new JobResponseImpl(false, "Unexpected runtime error: " + e.getMessage());
+	    } catch (Exception e) {
+	        return new JobResponseImpl(false, "Job failed: " + e.getMessage());
+	    }
 	}
 }
