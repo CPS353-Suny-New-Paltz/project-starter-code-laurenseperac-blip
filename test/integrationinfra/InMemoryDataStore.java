@@ -1,7 +1,11 @@
 package integrationinfra;
 
+import java.util.List;
+
 import process.DataValue;
 import process.DataValueImpl;
+import process.MultiDataValue;
+import process.MultiDataValueImpl;
 import process.StorageComputeAPI;
 
 public class InMemoryDataStore implements StorageComputeAPI {
@@ -25,6 +29,24 @@ public class InMemoryDataStore implements StorageComputeAPI {
 	@Override
 	public boolean writeOutput(String destination, DataValue data) {
 		outputConfig.getOutput().add("Value " + data.getValue());
+		return true;
+	}
+
+	@Override
+	public MultiDataValue readAllInputs(String filePath) {
+		MultiDataValueImpl multi = new MultiDataValueImpl(inputConfig.getInput());
+		
+		inputConfig.getInput().clear();
+		
+		return multi;
+	}
+
+	@Override
+	public boolean writeAllOutputs(String filePath, List<Integer> values) {
+		for (Integer val : values) {
+			outputConfig.getOutput().add("Value " + val);
+		}
+		
 		return true;
 	}
 
