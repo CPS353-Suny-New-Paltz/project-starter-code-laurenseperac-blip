@@ -8,6 +8,7 @@ import conceptual.ComputeRequest;
 import conceptual.ComputeResult;
 import process.DataValue;
 import process.DataValueImpl;
+import process.MultiDataValue;
 import process.StorageComputeAPI;
 import project.annotations.NetworkAPI;
 
@@ -37,21 +38,14 @@ public class UserComputeImpl implements UserComputeAPI{
 	    }
 
 	    try {
+	        MultiDataValue inputValues = storage.readAllInputs(request.getInputSource());
 	        List<Integer> results = new ArrayList<>();
 
-	        DataValue inputVal;
-	        while ((inputVal = storage.readInput(request.getInputSource())) != null && inputVal.getValue() != -1) {
-	            final int value = inputVal.getValue(); 
+	        for (int value : inputValues.getValues()) {
 	            ComputeRequest compReq = () -> value;
-
 	            ComputeResult compRes = engine.performComputation(compReq);
-	            if (compRes != null && compRes.getOutput() != -1) {
-	                results.add(compRes.getOutput());
-	            }
-	        }
-
-	        if (results.isEmpty()) {
-	            return new JobResponseImpl(false, "No valid inputs processed");
+	            // If compRes is null, treat as -1
+	            results.add(compRes != null ? compRes.getOutput() : -1);
 	        }
 
 	        storage.writeAllOutputs(request.getOutputDestination(), results);
