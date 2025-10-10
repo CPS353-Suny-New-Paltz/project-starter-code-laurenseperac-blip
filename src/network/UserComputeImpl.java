@@ -1,5 +1,8 @@
 package network;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import conceptual.ComputeEngineAPI;
 import conceptual.ComputeRequest;
 import conceptual.ComputeResult;
@@ -33,33 +36,25 @@ public class UserComputeImpl implements UserComputeAPI{
 	        return new JobResponseImpl(false, "Invalid file paths in request");
 	    }
 
-	    int maxIterations = 10000;
-	    int count = 0;
-	    boolean anyWritten = false;
-	    
 	    try {
+	        List<Integer> results = new ArrayList<>();
+
 	        DataValue inputVal;
+	        while ((inputVal = storage.readInput(request.getInputSource())) != null && inputVal.getValue() != -1) {
+	            final int value = inputVal.getValue(); 
+	            ComputeRequest compReq = () -> value;
 
-	        while ((inputVal = storage.readInput(request.getInputSource())) != null && count++ < maxIterations) {
-	            final DataValue currentVal = inputVal; 
-	            ComputeRequest compReq = () -> currentVal.getValue(); 
 	            ComputeResult compRes = engine.performComputation(compReq);
-
-	            if (compRes == null || compRes.getOutput() == -1) {
-	                continue; 
+	            if (compRes != null && compRes.getOutput() != -1) {
+	                results.add(compRes.getOutput());
 	            }
-
-	            DataValue outputVal = new DataValueImpl(compRes.getOutput());
-	            boolean success = storage.writeOutput(request.getOutputDestination(), outputVal);
-	            if (!success) {
-	                return new JobResponseImpl(false, "Output write failed");
-	            }
-	            anyWritten = true;
 	        }
 
-	        if (!anyWritten) {
+	        if (results.isEmpty()) {
 	            return new JobResponseImpl(false, "No valid inputs processed");
 	        }
+
+	        storage.writeAllOutputs(request.getOutputDestination(), results);
 
 	        return new JobResponseImpl(true, "Job completed successfully");
 
