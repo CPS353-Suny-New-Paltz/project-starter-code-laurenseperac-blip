@@ -6,8 +6,6 @@ import java.util.List;
 import conceptual.ComputeEngineAPI;
 import conceptual.ComputeRequest;
 import conceptual.ComputeResult;
-import process.DataValue;
-import process.DataValueImpl;
 import process.MultiDataValue;
 import process.StorageComputeAPI;
 import project.annotations.NetworkAPI;

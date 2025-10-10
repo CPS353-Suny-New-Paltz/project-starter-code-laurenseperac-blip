@@ -27,9 +27,8 @@ public class TestUserCompute {
 	    when(mockRequest.getInputSource()).thenReturn("input.txt");
 	    when(mockRequest.getOutputDestination()).thenReturn("output.txt");
 
-	    when(mockStorage.readInput("input.txt"))
-	        .thenReturn(new DataValueImpl(5))
-	        .thenReturn(null);
+	    when(mockStorage.readAllInputs("input.txt"))
+	        .thenReturn(() -> java.util.List.of(5));
 
 	    when(mockEngine.performComputation(any(ComputeRequest.class)))
 	        .thenReturn(() -> 3);
