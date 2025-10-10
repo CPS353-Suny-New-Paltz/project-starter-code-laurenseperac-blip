@@ -72,15 +72,21 @@ public class StorageComputeImpl implements StorageComputeAPI {
 
     @Override
     public boolean writeAllOutputs(String outputDestination, List<Integer> results) {
-        if (results == null || results.isEmpty()) return false;
+        if (results == null || results.isEmpty()) {
+        	return false;
+        }
 
         try {
             StringBuilder outputLine = new StringBuilder();
             int iterations = 0;
 
             for (Integer result : results) {
-                if (iterations >= MAX_ITERATIONS) break;
-                if (outputLine.length() > 0) outputLine.append(",");
+                if (iterations >= MAX_ITERATIONS) {
+                	break;
+                }
+                if (outputLine.length() > 0) {
+                	outputLine.append(",");
+                }
                 outputLine.append(result);
                 iterations++;
             }
@@ -98,7 +104,9 @@ public class StorageComputeImpl implements StorageComputeAPI {
     
     @Override
     public boolean writeOutput(String filePath, DataValue value) {
-        if (value == null) return false;
+        if (value == null) {
+        	return false;
+        }
 
         try {
             Files.write(Paths.get(filePath),
