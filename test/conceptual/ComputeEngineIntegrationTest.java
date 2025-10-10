@@ -29,14 +29,20 @@ public class ComputeEngineIntegrationTest {
 		InMemoryDataStore store = new InMemoryDataStore(inputConfig, outputConfig);
 
 		ComputeEngineAPI engine = new ComputeEngineImpl();
-		
 		UserComputeAPI user = new UserComputeImpl(engine, store);
+		
+		int maxIterations = 1000;
+		int count = 0;
 
-		while (!inputConfig.getInput().isEmpty()) {
-			DataValue val = store.readInput(null);
+		while (!inputConfig.getInput().isEmpty() && count++ < maxIterations) {
+			DataValue val = store.readInput("input");
+			if (val == null || val.getValue() == -1) {
+				break;
+			}
+			
 			ComputeResult result = engine.performComputation(() -> val.getValue());
 			DataValue outputVal = new DataValueImpl(result.getOutput());
-			store.writeOutput(null, outputVal);
+			store.writeOutput("output", outputVal);
 		}
 		assertFalse(output.isEmpty(), "Output should not be empty");
 		assertTrue(output.stream().anyMatch(s -> s.contains("Value")), "Output should contain formatted values");

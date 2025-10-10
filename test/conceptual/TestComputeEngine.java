@@ -19,5 +19,19 @@ public class TestComputeEngine {
 		assertNotNull(result);
 		assertEquals(3, result.getOutput());
 	}
+	
+	@Test
+	void testPrimeComputationEdgeCases() {
+		ComputeEngineAPI engine = new ComputeEngineImpl();
+		
+		ComputeRequest req1 = new ComputeRequestImpl(10);
+		assertEquals(7, engine.performComputation(req1).getOutput());
+		
+		ComputeRequest req2 = new ComputeRequestImpl(3);
+		assertEquals(2, engine.performComputation(req2).getOutput());
+		
+		ComputeRequest req3 = new ComputeRequestImpl(2);
+	    assertEquals(-1, engine.performComputation(req3).getOutput());
+	}
 
 }

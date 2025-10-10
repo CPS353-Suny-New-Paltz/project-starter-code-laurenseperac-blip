@@ -1,10 +1,12 @@
 package network;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import conceptual.ComputeEngineAPI;
 import conceptual.ComputeRequest;
 import conceptual.ComputeResult;
-import process.DataValue;
-import process.DataValueImpl;
+import process.MultiDataValue;
 import process.StorageComputeAPI;
 import project.annotations.NetworkAPI;
 
@@ -25,36 +27,33 @@ public class UserComputeImpl implements UserComputeAPI{
 
 	@Override
 	public JobResponse submitJob(JobRequest request) {
-		if (request == null) {
-			return new JobResponseImpl(false, "Invalid job request: null");
-		}
-		if (request.getInputSource() == null || request.getOutputDestination() == null) {
-			return new JobResponseImpl(false, "Invalid file paths in request");
-		}
-		
-		try {
-			DataValue inputVal = storage.readInput(request.getInputSource());
-			if (inputVal == null) {
-				return new JobResponseImpl(false, "Input file not found");
-			}
-			
-			ComputeRequest compReq = () -> inputVal.getValue();
-			ComputeResult compRes = engine.performComputation(compReq);
-			if (compRes == null || compRes.getOutput() == -1) {
-				return new JobResponseImpl(false, "Computation failed or invalid input");
-			}
-			
-			DataValue outputVal = new DataValueImpl(compRes.getOutput());
-			boolean success = storage.writeOutput(request.getOutputDestination(), outputVal);
-			if (!success) {
-				return new JobResponseImpl(false, "Output write failed");
-			}
-			return new JobResponseImpl(true, "Job completed successfully");
-		
-		} catch (RuntimeException e) {
-			return new JobResponseImpl(false, "Unexpected runtime error: " + e.getMessage());
-		} catch (Exception e) {
-			return new JobResponseImpl(false, "Job failed: " + e.getMessage());
-		}
+	    if (request == null) {
+	        return new JobResponseImpl(false, "Invalid job request: null");
+	    }
+
+	    if (request.getInputSource() == null || request.getOutputDestination() == null) {
+	        return new JobResponseImpl(false, "Invalid file paths in request");
+	    }
+
+	    try {
+	        MultiDataValue inputValues = storage.readAllInputs(request.getInputSource());
+	        List<Integer> results = new ArrayList<>();
+
+	        for (int value : inputValues.getValues()) {
+	            ComputeRequest compReq = () -> value;
+	            ComputeResult compRes = engine.performComputation(compReq);
+	            // If compRes is null, treat as -1
+	            results.add(compRes != null ? compRes.getOutput() : -1);
+	        }
+
+	        storage.writeAllOutputs(request.getOutputDestination(), results);
+
+	        return new JobResponseImpl(true, "Job completed successfully");
+
+	    } catch (RuntimeException e) {
+	        return new JobResponseImpl(false, "Unexpected runtime error: " + e.getMessage());
+	    } catch (Exception e) {
+	        return new JobResponseImpl(false, "Job failed: " + e.getMessage());
+	    }
 	}
 }

@@ -1,67 +1,39 @@
 package project.checkpointtests;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import conceptual.ComputeEngineAPI;
 import conceptual.ComputeEngineImpl;
-import conceptual.ComputeRequest;
-import conceptual.ComputeRequestImpl;
-import conceptual.ComputeResult;
 import process.StorageComputeAPI;
 import process.StorageComputeImpl;
-
+import network.UserComputeAPI;
+import network.UserComputeImpl;
+import network.JobRequest;
+import network.JobRequestImpl;
+import network.JobResponse;
 
 public class ManualTestingFramework {
 
-    public static final String INPUT = "manualTestInput.txt";
-    public static final String OUTPUT = "manualTestOutput.txt";
+    public static final String INPUT = "numbers.txt";
+    public static final String OUTPUT = "output.txt";
 
-    private static final int MAX_ITERATIONS = 100;
-
-    public static void main(String[] args) {
-        try {
-            ComputeEngineAPI engine = new ComputeEngineImpl(null);
-            StorageComputeAPI storage = new StorageComputeImpl();
-
-            int iterations = 0;
-            java.util.List<String> inputLines = java.nio.file.Files.readAllLines(
-                    java.nio.file.Paths.get(INPUT)
-            );
-
-            if (inputLines.isEmpty()) {
-            	return;
-            }
-
-            StringBuilder outputLine = new StringBuilder();
-
-            for (String line : inputLines) {
-                if (iterations++ >= MAX_ITERATIONS) {
-                	break;
-                }
-
-                int val;
-                try {
-                    val = Integer.parseInt(line.trim());
-                } catch (NumberFormatException e) {
-                    continue;
-                }
-
-                ComputeRequest request = new ComputeRequestImpl(val);
-                ComputeResult result = engine.performComputation(request);
-
-                if (outputLine.length() > 0) {
-                	outputLine.append(",");
-                }
-                outputLine.append(result.getOutput());
-            }
-
-            java.nio.file.Files.write(
-                    java.nio.file.Paths.get(OUTPUT),
-                    outputLine.toString().getBytes()
-            );
-
-            System.out.println("Computation finished. Results written to " + OUTPUT);
-
-        } catch (Exception e) {
-            e.printStackTrace();
+    public static void main(String[] args) throws Exception {
+        Path inputPath = Paths.get(INPUT);
+        if (inputPath.getParent() != null) {
+            Files.createDirectories(inputPath.getParent());
         }
+        Files.write(inputPath, "1\n2\n3".getBytes());
+
+        StorageComputeAPI storage = new StorageComputeImpl();
+        ComputeEngineAPI engine = new ComputeEngineImpl();
+        UserComputeAPI userAPI = new UserComputeImpl(engine, storage);
+
+        JobRequest job = new JobRequestImpl(INPUT, OUTPUT, ",");
+        JobResponse response = userAPI.submitJob(job);
+
+        System.out.println("Job success: " + response.isSuccess());
+        System.out.println("Message: " + response.getMessage());
     }
 }
