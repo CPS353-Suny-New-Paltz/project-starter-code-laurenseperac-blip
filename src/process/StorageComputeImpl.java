@@ -66,24 +66,23 @@ public class StorageComputeImpl implements StorageComputeAPI {
 	}
 
 	@Override
-    public boolean writeAllOutputs(String filePath, List<Integer> values) {
-		 try {
-	            File file = new File(filePath);
-	            if (file.getParentFile() != null) {
-	            	file.getParentFile().mkdirs(); 
-	            }
+	public boolean writeAllOutputs(String filePath, List<Integer> values) {
+	    File file = new File(filePath);
+	    if (file.getParentFile() != null) {
+	        file.getParentFile().mkdirs();
+	    }
 
-	            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-	                for (int i = 0; i < values.size(); i++) {
-	                    writer.write(String.valueOf(values.get(i)));
-	                    if (i < values.size() - 1) {
-	                    	writer.write(","); 
-	                    }
-	                }
+	    try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
+	        for (int i = 0; i < values.size(); i++) {
+	            writer.write(String.valueOf(values.get(i)));
+	            if (i < values.size() - 1) {
+	                writer.write(",");
 	            }
-	            return true;
-	        } catch (IOException e) {
-	            throw new RuntimeException("Error writing output file: " + e.getMessage(), e);
 	        }
-    }
+	        writer.flush();
+	        return true;
+	    } catch (IOException e) {
+	        throw new RuntimeException("Error writing output file: " + e.getMessage(), e);
+	    }
+	}
 }
