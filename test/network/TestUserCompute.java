@@ -20,32 +20,29 @@ public class TestUserCompute {
 
 	@Test
 	void testSubmitJobWithMock() {
-		
-		StorageComputeAPI mockStorage = mock(StorageComputeAPI.class);
-		ComputeEngineAPI mockEngine = mock(ComputeEngineAPI.class);
-		JobRequest mockRequest = mock(JobRequest.class);
-		
-		when(mockRequest.getInputSource()).thenReturn("input.txt");
-		when(mockRequest.getOutputDestination()).thenReturn("output.txt");
-		
-		when(mockStorage.readInput("input.txt")).thenReturn(new DataValueImpl(5));
-		
-		when(mockEngine.performComputation(any(ComputeRequest.class))).thenReturn(new ComputeResult() {
-			
-			@Override
-			public int getOutput() {
-				return 3;
-			}
-		});
-		
-		when(mockStorage.writeOutput(eq("output.txt"), any())).thenReturn(true);
+	    StorageComputeAPI mockStorage = mock(StorageComputeAPI.class);
+	    ComputeEngineAPI mockEngine = mock(ComputeEngineAPI.class);
+	    JobRequest mockRequest = mock(JobRequest.class);
 
-		UserComputeAPI api = new UserComputeImpl(mockEngine, mockStorage);
-		JobResponse response = api.submitJob(mockRequest);
+	    when(mockRequest.getInputSource()).thenReturn("input.txt");
+	    when(mockRequest.getOutputDestination()).thenReturn("output.txt");
 
-		assertNotNull(response);
-		assertTrue(response.isSuccess());
-		assertEquals("Job completed successfully", response.getMessage());
+	    when(mockStorage.readInput("input.txt"))
+	        .thenReturn(new DataValueImpl(5))
+	        .thenReturn(null);
+
+	    when(mockEngine.performComputation(any(ComputeRequest.class)))
+	        .thenReturn(() -> 3);
+
+	    when(mockStorage.writeAllOutputs(eq("output.txt"), any())).thenReturn(true);
+
+	    UserComputeAPI api = new UserComputeImpl(mockEngine, mockStorage);
+	    JobResponse response = api.submitJob(mockRequest);
+
+	    assertNotNull(response);
+	    assertTrue(response.isSuccess());
+	    assertEquals("Job completed successfully", response.getMessage());
 	}
+
 
 }
