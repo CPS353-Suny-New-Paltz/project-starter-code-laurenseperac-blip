@@ -6,83 +6,107 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class StorageComputeImpl implements StorageComputeAPI {
 
-    @Override
-    public DataValue readInput(String filePath) {
-        try (var reader = new java.io.BufferedReader(new java.io.FileReader(filePath))) {
-            String line = reader.readLine();
-            if (line == null) {
-            	return null;
+	private static final int MAX_ITERATIONS = 1000;
+	
+	@Override
+    public DataValue readInput(String inputSource) {
+        try {
+            List<String> inputLines = Files.readAllLines(Paths.get(inputSource))
+                                           .stream()
+                                           .filter(line -> !line.trim().isEmpty())
+                                           .collect(Collectors.toList());
+
+            if (inputLines.isEmpty()) {
+                return new DataValueImpl(-1);
             }
-            return new DataValueImpl(Integer.parseInt(line.trim()));
-        } catch (Exception e) {
-            return null;
+
+            String line = inputLines.remove(0).trim();
+            int value = Integer.parseInt(line);
+
+            Files.write(Paths.get(inputSource), inputLines);
+
+            return new DataValueImpl(value);
+
+        } catch (IOException e) {
+            throw new RuntimeException("Error reading input file: " + e.getMessage(), e);
+        } catch (NumberFormatException e) {
+            return new DataValueImpl(-1);
+        }
+    }
+	
+	@Override
+	public MultiDataValue readAllInputs(String inputSource) {
+        try {
+            List<String> inputLines = Files.readAllLines(Paths.get(inputSource))
+                                           .stream()
+                                           .filter(line -> !line.trim().isEmpty())
+                                           .collect(Collectors.toList());
+
+            List<Integer> values = inputLines.stream()
+                                             .map(line -> {
+                                                 try {
+                                                     return Integer.parseInt(line.trim());
+                                                 } catch (NumberFormatException e) {
+                                                     return -1;
+                                                 }
+                                             })
+                                             .collect(Collectors.toList());
+
+            Files.write(Paths.get(inputSource), Collections.emptyList());
+
+            return new MultiDataValueImpl(values);
+
+        } catch (IOException e) {
+            throw new RuntimeException("Error reading input file: " + e.getMessage(), e);
         }
     }
 
     @Override
-    public boolean writeOutput(String filePath, DataValue data) {
-    	try {
-            File file = new File(filePath);
-            if (file.getParentFile() != null) {
-                file.getParentFile().mkdirs(); 
+    public boolean writeAllOutputs(String outputDestination, List<Integer> results) {
+        if (results == null || results.isEmpty()) return false;
+
+        try {
+            StringBuilder outputLine = new StringBuilder();
+            int iterations = 0;
+
+            for (Integer result : results) {
+                if (iterations >= MAX_ITERATIONS) break;
+                if (outputLine.length() > 0) outputLine.append(",");
+                outputLine.append(result);
+                iterations++;
             }
 
-            boolean appendComma = file.exists() && file.length() > 0;
+            Files.write(Paths.get(outputDestination),
+                        Collections.singletonList(outputLine.toString()));
 
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
-                if (appendComma) {
-                	writer.write(",");
-                }
-                writer.write(String.valueOf(data.getValue()));
-            }
+            return true; 
+
+        } catch (IOException e) {
+            System.err.println("Error writing output file: " + e.getMessage());
+            return false; 
+        }
+    }
+    
+    @Override
+    public boolean writeOutput(String filePath, DataValue value) {
+        if (value == null) return false;
+
+        try {
+            Files.write(Paths.get(filePath),
+                        Collections.singletonList(String.valueOf(value.getValue())));
             return true;
         } catch (IOException e) {
-            throw new RuntimeException("Error writing output file: " + e.getMessage(), e);
+            System.err.println("Error writing output file: " + e.getMessage());
+            return false;
         }
     }
-
-	@Override
-	public MultiDataValue readAllInputs(String filePath) {
-		List<Integer> numbers = new ArrayList<>();
-		try(BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-			String line;
-			while ((line = reader.readLine()) != null) {
-				String[] parts = line.split("[,\\s]+");
-				for (String p: parts) {
-					if (!p.isBlank()) {
-						numbers.add(Integer.parseInt(p.trim()));
-					}
-				}
-			}
-		} catch (IOException e) {
-			throw new RuntimeException("Error reading input file: " + e.getMessage(), e);
-		}
-		return new MultiDataValueImpl(numbers);
-	}
-
-	@Override
-	public boolean writeAllOutputs(String filePath, List<Integer> values) {
-	    File file = new File(filePath);
-	    if (file.getParentFile() != null) {
-	        file.getParentFile().mkdirs();
-	    }
-
-	    try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
-	        for (int i = 0; i < values.size(); i++) {
-	            writer.write(String.valueOf(values.get(i)));
-	            if (i < values.size() - 1) {
-	                writer.write(",");
-	            }
-	        }
-	        writer.flush();
-	        return true;
-	    } catch (IOException e) {
-	        throw new RuntimeException("Error writing output file: " + e.getMessage(), e);
-	    }
-	}
 }
