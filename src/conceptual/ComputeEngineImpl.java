@@ -36,6 +36,8 @@ public class ComputeEngineImpl implements ComputeEngineAPI {
 		}
 	}
 	
+	
+	// does not need validation because it's a private helper method
 	private boolean isPrime(int x) {
 		if(x < 2) { 
 			return false;
