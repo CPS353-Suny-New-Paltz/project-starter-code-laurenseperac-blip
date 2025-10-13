@@ -19,13 +19,17 @@ public class UserComputeValidationTest {
 	void testConstructorThrowsExceptionOnNullArguments() {
 		// all null mock values
 		StorageComputeAPI mockStorage = new StorageComputeAPI() {
-			@Override public DataValue readInput(String inputSource) { 
+			@Override 
+			public DataValue readInput(String inputSource) { 
 				return null; }
-			@Override public MultiDataValue readAllInputs(String inputSource) { 
+			@Override 
+			public MultiDataValue readAllInputs(String inputSource) { 
 				return null; }
-			@Override public boolean writeAllOutputs(String outputDestination, List<Integer> results) { 
+			@Override 
+			public boolean writeAllOutputs(String outputDestination, List<Integer> results) { 
 				return false; }
-			@Override public boolean writeOutput(String filePath, DataValue value) { 
+			@Override 
+			public boolean writeOutput(String filePath, DataValue value) { 
 				return false; }
 		};
 		ComputeEngineAPI mockEngine = (req) -> null;
@@ -38,13 +42,17 @@ public class UserComputeValidationTest {
 	void testSubmitJobRejectsNullRequest() {
 		
 		StorageComputeAPI mockStorage = new StorageComputeAPI() {
-			@Override public DataValue readInput(String inputSource) { 
+			@Override 
+			public DataValue readInput(String inputSource) { 
 				return null; }
-			@Override public MultiDataValue readAllInputs(String inputSource) { 
+			@Override 
+			public MultiDataValue readAllInputs(String inputSource) { 
 				return null; }
-			@Override public boolean writeAllOutputs(String outputDestination, List<Integer> results) { 
+			@Override 
+			public boolean writeAllOutputs(String outputDestination, List<Integer> results) { 
 				return false; }
-			@Override public boolean writeOutput(String filePath, DataValue value) { 
+			@Override 
+			public boolean writeOutput(String filePath, DataValue value) { 
 				return false; }
 		};
 		ComputeEngineAPI mockEngine = (req) -> null;
