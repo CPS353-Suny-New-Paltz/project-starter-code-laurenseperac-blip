@@ -21,16 +21,20 @@ public class UserComputeValidationTest {
 		StorageComputeAPI mockStorage = new StorageComputeAPI() {
 			@Override 
 			public DataValue readInput(String inputSource) { 
-				return null; }
+				return null; 
+				}
 			@Override 
 			public MultiDataValue readAllInputs(String inputSource) { 
-				return null; }
+				return null; 
+				}
 			@Override 
 			public boolean writeAllOutputs(String outputDestination, List<Integer> results) { 
-				return false; }
+				return false; 
+				}
 			@Override 
 			public boolean writeOutput(String filePath, DataValue value) { 
-				return false; }
+				return false; 
+				}
 		};
 		ComputeEngineAPI mockEngine = (req) -> null;
 		
@@ -44,16 +48,20 @@ public class UserComputeValidationTest {
 		StorageComputeAPI mockStorage = new StorageComputeAPI() {
 			@Override 
 			public DataValue readInput(String inputSource) { 
-				return null; }
+				return null; 
+				}
 			@Override 
 			public MultiDataValue readAllInputs(String inputSource) { 
-				return null; }
+				return null; 
+				}
 			@Override 
 			public boolean writeAllOutputs(String outputDestination, List<Integer> results) { 
-				return false; }
+				return false; 
+				}
 			@Override 
 			public boolean writeOutput(String filePath, DataValue value) { 
-				return false; }
+				return false; 
+				}
 		};
 		ComputeEngineAPI mockEngine = (req) -> null;
 		
