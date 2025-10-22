@@ -1,4 +1,4 @@
-package testHarness;
+package testharness;
 
 import network.MultithreadedNetworkAPI;
 import network.UserComputeAPI;
