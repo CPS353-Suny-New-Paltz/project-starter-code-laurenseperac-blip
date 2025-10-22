@@ -11,8 +11,6 @@ import process.StorageComputeAPI;
 import project.annotations.NetworkAPI;
 
 
-
-@NetworkAPI
 public class UserComputeImpl implements UserComputeAPI{
 	private final ComputeEngineAPI engine;
 	private final StorageComputeAPI storage;
