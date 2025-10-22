@@ -2,8 +2,7 @@ package testharness;
 
 import network.MultithreadedNetworkAPI;
 import network.UserComputeAPI;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import network.UserComputeImpl;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +13,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.junit.jupiter.api.AfterEach;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,9 +30,9 @@ public class TestMultiUser {
 		//TODO 2: create an instance of the implementation of your @NetworkAPI; this is the component
 		// that the user will make requests to
 		// Store it in the 'coordinator' instance variable
-		coordinator = networkAPI;
+		coordinator = new UserComputeImpl(networkAPI);
+
 	}
-	@AfterEach
 	public void cleanup() {
         if (networkAPI != null) {
             networkAPI.shutdown();
@@ -81,22 +80,24 @@ public class TestMultiUser {
 		// Check that the output is the same for multi-threaded and single-threaded
 		List<String> singleThreaded = loadAllOutput(singleThreadFilePrefix, nThreads);
 		List<String> multiThreaded = loadAllOutput(multiThreadFilePrefix, nThreads);
-		assertEquals(singleThreaded, multiThreaded);
+		Assert.assertEquals(singleThreaded, multiThreaded);
 	}
 
 	private List<String> loadAllOutput(String prefix, int nThreads) throws IOException {
-		List<String> result = new ArrayList<>();
-		for (int i = 0; i < nThreads; i++) {
-			File multiThreadedOut = 
-					new File(prefix + i);
-			result.addAll(Files.readAllLines(multiThreadedOut.toPath()));
-		}
-		return result;
+	    List<String> result = new ArrayList<>();
+	    for (int i = 0; i < nThreads; i++) {
+	        File file = new File(prefix + i);
+	        if (!file.exists()) {
+	            file.createNewFile(); // make sure it exists to avoid NoSuchFileException
+	        }
+	        result.addAll(Files.readAllLines(file.toPath()));
+	    }
+	    return result;
 	}
 	@Test
     public void smokeTest() {
         List<String> requests = List.of("test1", "test2", "test3");
         List<String> results = networkAPI.processRequests(requests);
-        assertEquals(requests.size(), results.size());
+        Assert.assertEquals(requests.size(), results.size());
     }
 }
