@@ -16,10 +16,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ComputeEngineIntegrationTest {
+public class ComputeEngineTest {
 
 	@Test
-	void testEndtoEnd() {
+	void testCompute() {
 		List<Integer> input = new ArrayList<>(Arrays.asList(1, 10, 25));
 		List<String> output = new ArrayList<>();
 

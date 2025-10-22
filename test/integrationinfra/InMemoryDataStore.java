@@ -14,11 +14,18 @@ public class InMemoryDataStore implements StorageComputeAPI {
 
 	private final InMemoryInputConfig inputConfig;
 	private final InMemoryOutputConfig outputConfig;
-
+	
+	
 	public InMemoryDataStore(InMemoryInputConfig inputConfig, InMemoryOutputConfig outputConfig) {
 		this.inputConfig = inputConfig;
 		this.outputConfig = outputConfig;
 	}
+	
+	public InMemoryDataStore() {
+        this.inputConfig = new InMemoryInputConfig();
+        this.outputConfig = new InMemoryOutputConfig();
+    }
+
 
 	@Override
 	public DataValue readInput(String source) {
