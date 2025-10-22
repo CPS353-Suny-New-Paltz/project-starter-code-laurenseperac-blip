@@ -33,6 +33,7 @@ public class MultithreadedNetworkAPI implements UserComputeAPI {
 		}
 	}
 	
+	// code for review
 	public List<String> processRequests(List<String> requests) {
 		if (requests == null) {
 			return new ArrayList<>();
@@ -62,6 +63,7 @@ public class MultithreadedNetworkAPI implements UserComputeAPI {
 			return empty;
 		}
 	}
+	// end code
 	
 	public void shutdown() {
 		executor.shutdown();
