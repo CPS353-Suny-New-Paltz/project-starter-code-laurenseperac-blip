@@ -4,24 +4,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 import conceptual.ComputeEngineAPI;
+import conceptual.ComputeEngineImpl;
 import conceptual.ComputeRequest;
 import conceptual.ComputeResult;
 import process.MultiDataValue;
 import process.StorageComputeAPI;
+import process.StorageComputeImpl;
 import project.annotations.NetworkAPI;
 
 
-public class UserComputeImpl implements UserComputeAPI{
-	private final ComputeEngineAPI engine;
-	private final StorageComputeAPI storage;
+public class UserComputeImpl implements UserComputeAPI {
+    private final ComputeEngineAPI engine;
+    private final StorageComputeAPI storage;
 
-	public UserComputeImpl(ComputeEngineAPI engine, StorageComputeAPI storage) {
-		if (engine == null || storage == null) {
-			throw new IllegalArgumentException("Engine and storage must not be null");
-		}
-		this.engine = engine;
-		this.storage = storage;
-	}
+    public UserComputeImpl(ComputeEngineAPI engine, StorageComputeAPI storage) {
+        if (engine == null || storage == null) {
+            throw new IllegalArgumentException("Engine and storage must not be null");
+        }
+        this.engine = engine;
+        this.storage = storage;
+    }
+
+    public UserComputeImpl(MultithreadedNetworkAPI networkAPI) {
+        if (networkAPI == null) {
+            throw new IllegalArgumentException("Network API must not be null");
+        }
+        this.engine = new ComputeEngineImpl();
+        this.storage = new StorageComputeImpl();
+    }
+
 
 	@Override
 	public JobResponse submitJob(JobRequest request) {
