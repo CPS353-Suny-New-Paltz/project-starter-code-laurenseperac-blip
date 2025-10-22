@@ -1,5 +1,6 @@
 package integrationinfra;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class InMemoryInputConfig {
@@ -7,6 +8,11 @@ public class InMemoryInputConfig {
 	public InMemoryInputConfig(List<Integer> input) {
 		this.input = input;
 	}
+	
+	public InMemoryInputConfig() {
+        this.input = new ArrayList<>();
+    }
+	
 	public List<Integer> getInput() {
 		return input;
 	}
