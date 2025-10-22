@@ -15,7 +15,7 @@ public class TestUser {
 	private final UserComputeAPI coordinator;
 
 	public TestUser(UserComputeAPI coordinator) {
-		this.coordinator = Objects.requireNonNull(coordinator);
+		this.coordinator = coordinator;
 	}
 
 	public void run(String outputPath) {

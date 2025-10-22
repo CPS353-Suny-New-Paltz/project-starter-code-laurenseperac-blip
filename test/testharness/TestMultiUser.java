@@ -14,6 +14,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -32,6 +33,7 @@ public class TestMultiUser {
 		// Store it in the 'coordinator' instance variable
 		coordinator = networkAPI;
 	}
+	@AfterEach
 	public void cleanup() {
         if (networkAPI != null) {
             networkAPI.shutdown();
