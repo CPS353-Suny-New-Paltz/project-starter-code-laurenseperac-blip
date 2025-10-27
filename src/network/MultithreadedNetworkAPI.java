@@ -33,24 +33,27 @@ public class MultithreadedNetworkAPI implements UserComputeAPI {
 		}
 	}
 	
+	// code for review
 	public List<String> processRequests(List<String> requests) {
 		if (requests == null) {
-			return new ArrayList<>();
+			return new ArrayList<>();		// return empty list if null
 		}
 		
+		// prepare a list of callables to process requests concurrently
 		List<Callable<String>> callables = new ArrayList<>();
 		for (String req : requests) {
 			callables.add(() -> {
-				return "processed:" + req;
+				return "processed:" + req;	// simulate request processing
 			});
 		}
 		
 		try {
+			// submit tasks to executor
 			List<Future<String>> futures = executor.invokeAll(callables);
-			List<String> results = new ArrayList<>(futures.size());
+			List<String> results = new ArrayList<>(futures.size());		// collect results
 			for(Future<String> f : futures) {
 				try {
-					results.add(f.get());
+					results.add(f.get());		// normal case
 				} catch (ExecutionException ee) {
 					results.add("error:" + ee.getCause().getMessage());
 				}
