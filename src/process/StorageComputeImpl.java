@@ -55,8 +55,6 @@ public class StorageComputeImpl implements StorageComputeAPI {
                                              })
                                              .collect(Collectors.toList());
 
-            Files.write(Paths.get(inputSource), Collections.emptyList());
-
             return new MultiDataValueImpl(values);
 
         } catch (IOException e) {
