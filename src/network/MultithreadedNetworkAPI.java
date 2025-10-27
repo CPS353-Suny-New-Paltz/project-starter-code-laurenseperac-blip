@@ -65,7 +65,6 @@ public class MultithreadedNetworkAPI implements UserComputeAPI {
 			return empty;
 		}
 	}
-	// end code
 	
 	public void shutdown() {
 		executor.shutdown();
