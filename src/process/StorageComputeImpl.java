@@ -31,7 +31,8 @@ public class StorageComputeImpl implements StorageComputeAPI {
             return new DataValueImpl(value);
 
         } catch (IOException e) {
-            throw new RuntimeException("Error reading input file: " + e.getMessage(), e);
+            System.err.println("Error reading input file: " + e.getMessage());
+            return new DataValueImpl(-1);
         } catch (NumberFormatException e) {
             return new DataValueImpl(-1);
         }
@@ -55,12 +56,11 @@ public class StorageComputeImpl implements StorageComputeAPI {
                                              })
                                              .collect(Collectors.toList());
 
-            Files.write(Paths.get(inputSource), Collections.emptyList());
-
             return new MultiDataValueImpl(values);
 
         } catch (IOException e) {
-            throw new RuntimeException("Error reading input file: " + e.getMessage(), e);
+            System.err.println("Error reading input file: " + e.getMessage());
+            return new MultiDataValueImpl(Collections.emptyList());	// fallback
         }
     }
 
