@@ -6,9 +6,9 @@ public class JobRequestImpl implements JobRequest {
 	private final String outputDestination;
 	private final String delimiter;
 	
-	public JobRequestImpl(String inputSource, String oututDestination, String delimiter) {
+	public JobRequestImpl(String inputSource, String outputDestination, String delimiter) {
 		this.inputSource = inputSource;
-		this.outputDestination = oututDestination;
+		this.outputDestination = outputDestination;
 		this.delimiter = delimiter;
 	}
 
