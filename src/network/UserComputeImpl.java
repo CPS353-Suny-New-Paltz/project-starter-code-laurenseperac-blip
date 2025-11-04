@@ -31,6 +31,14 @@ public class UserComputeImpl implements UserComputeAPI {
         this.engine = new ComputeEngineImpl();
         this.storage = new StorageComputeImpl();
     }
+    
+    public ComputeEngineAPI getEngine() {
+        return engine;
+    }
+
+    public StorageComputeAPI getStorage() {
+        return storage;
+    }
 
 
 	@Override
