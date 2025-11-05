@@ -10,6 +10,9 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import conceptual.ComputeEngineImpl;
+import conceptual.ComputeRequest;
+import conceptual.ComputeResult;
+import process.MultiDataValue;
 import process.StorageComputeImpl;
 
 public class MultithreadedNetworkAPI implements UserComputeAPI {
@@ -26,12 +29,44 @@ public class MultithreadedNetworkAPI implements UserComputeAPI {
 	
 	@Override
 	public JobResponse submitJob(JobRequest request) {
-		try {
-			return delegate.submitJob(request);
-		} catch (Exception e) {
-			return new JobResponseImpl(false, "submitJob failed: " + e.getMessage());
+		if (request == null) {
+			return new JobResponseImpl(false, "Invalid job request: null");
 		}
-	}
+		
+		try {
+	        MultiDataValue inputValues = delegate.getStorage().readAllInputs(request.getInputSource());
+	        List<Integer> values = inputValues.getValues();
+
+	        if (values.isEmpty()) {
+	            return new JobResponseImpl(false, "No input values to process");
+	        }
+	        
+	        List<Callable<Integer>> tasks = new ArrayList<>();
+	        for (int v : values) {
+	            tasks.add(() -> {
+	                ComputeRequest compReq = () -> v;
+	                ComputeResult compRes = delegate.getEngine().performComputation(compReq);
+	                return (compRes != null) ? compRes.getOutput() : -1;
+	            });
+	        }
+	        
+	        List<Future<Integer>> futures = executor.invokeAll(tasks);
+	        List<Integer> results = new ArrayList<>();
+	        for (Future<Integer> f : futures) {
+	            try {
+	                results.add(f.get());
+	            } catch (ExecutionException e) {
+	                results.add(-1);
+	            }
+	        }
+	        
+	        boolean success = delegate.getStorage().writeAllOutputs(request.getOutputDestination(), results);
+	        return new JobResponseImpl(success, success ? "Job completed (multithreaded)" : "Output write failed");
+
+	    } catch (Exception e) {
+	        return new JobResponseImpl(false, "Multithreaded job failed: " + e.getMessage());
+	    }
+	}}
 	
 	// code for review
 	public List<String> processRequests(List<String> requests) {
