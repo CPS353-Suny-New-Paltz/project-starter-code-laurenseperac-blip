@@ -66,7 +66,7 @@ public class MultithreadedNetworkAPI implements UserComputeAPI {
 	    } catch (Exception e) {
 	        return new JobResponseImpl(false, "Multithreaded job failed: " + e.getMessage());
 	    }
-	}}
+	}
 	
 	// code for review
 	public List<String> processRequests(List<String> requests) {
