@@ -27,6 +27,14 @@ public class MultithreadedNetworkAPI implements UserComputeAPI {
 		this.executor = Executors.newFixedThreadPool(MAX_THREADS);
 	}
 	
+	public MultithreadedNetworkAPI(UserComputeImpl userCompute) {
+	    if (userCompute == null) {
+	        throw new IllegalArgumentException("UserComputeImpl must not be null");
+	    }
+	    this.delegate = userCompute;
+	    this.executor = Executors.newFixedThreadPool(MAX_THREADS);
+	}
+
 	@Override
 	public JobResponse submitJob(JobRequest request) {
 		if (request == null) {
