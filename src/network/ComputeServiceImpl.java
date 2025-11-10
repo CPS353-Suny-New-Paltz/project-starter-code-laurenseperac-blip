@@ -14,7 +14,7 @@ public class ComputeServiceImpl extends ComputeServiceGrpc.ComputeServiceImplBas
 
     public ComputeServiceImpl() {
         this.networkAPI = new MultithreadedNetworkAPI(
-            new UserComputeImpl(new ComputeEngineImpl(), new StorageComputeImpl())
+            new UserComputeImpl(new ComputeEngineImpl(), new StorageGrpcClient("localhost:50052"))
         );
     }
 

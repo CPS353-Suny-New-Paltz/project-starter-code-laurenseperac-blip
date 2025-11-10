@@ -1,38 +1,39 @@
 package network;
 
+import io.grpc.Server;
+import io.grpc.ServerBuilder;
 import io.grpc.Grpc;
 import io.grpc.InsecureServerCredentials;
-import io.grpc.Server;
 import io.grpc.protobuf.services.ProtoReflectionService;
-import proto.compute.ComputeServiceGrpc;
+import proto.storage.StorageServiceGrpc;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-public class ComputeServer {
+public class StorageServer {
+
     private Server server;
 
     private void start() throws IOException {
-        int port = 50051;
-        server = Grpc.newServerBuilderForPort(port, InsecureServerCredentials.create())
-                .addService(ComputeServiceGrpc.bindService(new ComputeServiceImpl()))
-                .addService(ProtoReflectionService.newInstance())
+        int port = 50052;
+        server = ServerBuilder.forPort(50052)
+                .addService(StorageServiceGrpc.bindService(new StorageServiceImpl()))
                 .build()
                 .start();
 
-        System.out.println("ComputeServer started on port " + port);
+        System.out.println("StorageServer started on port " + port);
 
-        // graceful shutdown
+        // Graceful shutdown
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            System.err.println("*** shutting down gRPC server since JVM is shutting down");
+            System.err.println("*** shutting down storage server since JVM is shutting down");
             try {
                 if (server != null) {
-                    server.shutdown().awaitTermination(30, TimeUnit.SECONDS);
+                    server.shutdown().awaitTermination(10, TimeUnit.SECONDS);
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace(System.err);
             }
-            System.err.println("*** server shut down");
+            System.err.println("*** storage server shut down");
         }));
     }
 
@@ -43,8 +44,8 @@ public class ComputeServer {
     }
 
     public static void main(String[] args) throws Exception {
-        final ComputeServer server = new ComputeServer();
-        server.start();
-        server.blockUntilShutdown();
+        final StorageServer ss = new StorageServer();
+        ss.start();
+        ss.blockUntilShutdown();
     }
 }
