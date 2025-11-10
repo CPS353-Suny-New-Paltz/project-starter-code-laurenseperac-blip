@@ -4,6 +4,8 @@ import io.grpc.Grpc;
 import io.grpc.InsecureServerCredentials;
 import io.grpc.Server;
 import io.grpc.protobuf.services.ProtoReflectionService;
+import proto.compute.ComputeServiceGrpc;
+
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -13,10 +15,10 @@ public class ComputeServer {
     private void start() throws IOException {
         int port = 50051;
         server = Grpc.newServerBuilderForPort(port, InsecureServerCredentials.create())
-            .addService(new ComputeServiceImpl())
-            .addService(ProtoReflectionService.newInstance())
-            .build()
-            .start();
+                .addService(ComputeServiceGrpc.bindService(new ComputeServiceImpl()))
+                .addService(ProtoReflectionService.newInstance())
+                .build()
+                .start();
 
         System.out.println("ComputeServer started on port " + port);
 
