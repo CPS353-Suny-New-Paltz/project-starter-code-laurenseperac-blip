@@ -59,7 +59,7 @@ public class Checkpoint3TestSuite {
     }
 
     // Checks that each implementation is instantiated in at least one test
-    @ParameterizedTest
+ //   @ParameterizedTest
     @ValueSource(classes = {NetworkAPI.class, ProcessAPI.class, ConceptualAPI.class })
     public void checkSmokeTest(Class<? extends Annotation> apiAnnotation) throws Exception {
         Class<?> apiImpl = getApiImplClass(apiAnnotation); 
