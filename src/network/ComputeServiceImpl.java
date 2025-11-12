@@ -1,14 +1,12 @@
 package network;
 
 import io.grpc.stub.StreamObserver;
-import network.JobRequest;
-import network.JobResponse;
-import network.MultithreadedNetworkAPI;
 import conceptual.ComputeEngineImpl;
-import process.StorageComputeImpl;
 import proto.compute.ComputeProto;
 import proto.compute.ComputeServiceGrpc;
 
+//code for review
+//**************
 public class ComputeServiceImpl extends ComputeServiceGrpc.ComputeServiceImplBase {
     private final MultithreadedNetworkAPI networkAPI;
 
@@ -42,3 +40,5 @@ public class ComputeServiceImpl extends ComputeServiceGrpc.ComputeServiceImplBas
         }
     }
 }
+
+// ****************
