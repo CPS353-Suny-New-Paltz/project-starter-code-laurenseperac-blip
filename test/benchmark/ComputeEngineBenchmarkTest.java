@@ -15,7 +15,7 @@ import process.StorageComputeImpl;
 public class ComputeEngineBenchmarkTest {
 
     private static final int NUM_VALUES = 1_000_000; 
-    private final int MAX_VALUE = 1_000_000;
+    private static final int MAX_VALUE = 1_000_000;
 
     private File createTempInputFile() throws Exception {
         File f = File.createTempFile("bench_input", ".txt");

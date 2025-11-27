@@ -55,7 +55,9 @@ public class ComputeEngineImpl implements ComputeEngineAPI {
     }
 
     private void printTiming(long totalStart, long loopTime, long isPrimeTime, int isPrimeCalls) {
-        if (!DEBUG_TIMING) return; // do nothing unless debugging
+        if (!DEBUG_TIMING) {
+        	return; // do nothing unless debugging
+        }
 
         long totalTime = System.nanoTime() - totalStart;
 
