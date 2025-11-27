@@ -5,7 +5,16 @@ package conceptual;
  * - Instrumented performComputation calls with System.nanoTime() in order to
  * 	measure how long each major part of the method takes.
  * 
- * - It was found that the largest CPU consumer was primality checking.
+ * - It was found that most CPU consumption stems from repeated primality checks
+ * 	and repeated looping.
+ * 
+ * - Fix: 
+ * 	1) Precompute primes using a Sieve of Eratosthenes for batch-style workloads
+ * 	2) Use a Miller-Rabin test for 32-bit ints where sieving would be too large, or for
+ * 		single requests. 
+ * 			- eliminate repeated primality tests
+ * 			- eliminate repeated looping
+ * 			- cache primes
  * 
  */
 
