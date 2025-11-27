@@ -1,5 +1,14 @@
 package conceptual;
 
+/**
+ * How the bottleneck was diagnosed:
+ * - Instrumented performComputation calls with System.nanoTime() in order to
+ * 	measure how long each major part of the method takes.
+ * 
+ * - It was found that the largest CPU consumer was primality checking.
+ * 
+ */
+
 public class FastComputeEngineImpl implements ComputeEngineAPI {
 	private static final int SIEVE_THRESHOLD = 100_000;
 
