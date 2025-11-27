@@ -13,7 +13,7 @@ public class TestComputeEngine {
 		ComputeRequest mockRequest = mock(ComputeRequest.class);
 		when(mockRequest.getInput()).thenReturn(5);
 
-		ComputeEngineAPI engine = new ComputeEngineImpl(null);
+		ComputeEngineAPI engine = new ComputeEngineImpl();
 		ComputeResult result = engine.performComputation(mockRequest);
 
 		assertNotNull(result);
