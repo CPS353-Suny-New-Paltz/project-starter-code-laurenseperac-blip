@@ -11,6 +11,8 @@ service StorageService {
   // Single value read/write (optional)
   rpc ReadInput(ReadInputRequest) returns (DataValueResponse);
   rpc WriteOutput(WriteOutputRequest) returns (WriteResponse);
+  
+  rpc GenerateChart(GenerateChartRequest) returns (GenerateChartResponse);
 }
 
 message ReadAllInputsRequest {
@@ -46,4 +48,14 @@ message WriteOutputRequest {
 message WriteResponse {
   optional bool success = 1;
   optional string message = 2;
+}
+
+message GenerateChartRequest {
+    repeated int32 values = 1;
+    optional string outputFilePath = 2;
+}
+
+message GenerateChartResponse {
+    optional bool success = 1;
+    optional string message = 2;
 }
