@@ -93,4 +93,37 @@ public class StorageServiceImpl extends StorageServiceGrpc.StorageServiceImplBas
         responseObserver.onNext(res);
         responseObserver.onCompleted();
     }
+    
+    @Override
+    public void generateChart(StorageProto.GenerateChartRequest request,
+                              StreamObserver<StorageProto.GenerateChartResponse> responseObserver) {
+
+        List<Integer> vals = request.getValuesList();
+        String outPath = request.getOutputFilePath();
+
+        if (vals == null || vals.isEmpty()) {
+            responseObserver.onNext(StorageProto.GenerateChartResponse.newBuilder()
+                    .setSuccess(false)
+                    .setMessage("No values provided")
+                    .build());
+            responseObserver.onCompleted();
+            return;
+        }
+
+        try {
+            visualization.PrimeChartGenerator.generatePieChart(vals, outPath);
+
+            responseObserver.onNext(StorageProto.GenerateChartResponse.newBuilder()
+                    .setSuccess(true)
+                    .setMessage("Chart generated: " + outPath)
+                    .build());
+        } catch (Exception e) {
+            responseObserver.onNext(StorageProto.GenerateChartResponse.newBuilder()
+                    .setSuccess(false)
+                    .setMessage("Error generating chart: " + e.getMessage())
+                    .build());
+        }
+
+        responseObserver.onCompleted();
+    }
 }
