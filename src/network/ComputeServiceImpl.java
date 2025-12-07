@@ -5,8 +5,6 @@ import conceptual.ComputeEngineImpl;
 import proto.compute.ComputeProto;
 import proto.compute.ComputeServiceGrpc;
 
-//code for review
-//**************
 public class ComputeServiceImpl extends ComputeServiceGrpc.ComputeServiceImplBase {
     private final MultithreadedNetworkAPI networkAPI;
 
@@ -27,9 +25,11 @@ public class ComputeServiceImpl extends ComputeServiceGrpc.ComputeServiceImplBas
 
             JobResponse internalRes = networkAPI.submitJob(internalReq);
 
+            String chartPath = internalReq.getOutputDestination().replace(".txt", "_chart.png");
+            
             ComputeProto.JobResponse response = ComputeProto.JobResponse.newBuilder()
                 .setSuccess(internalRes.isSuccess())
-                .setMessage(internalRes.getMessage())
+                .setMessage(internalRes.getMessage() + ". Chart saved at: " + chartPath)
                 .build();
 
             responseObserver.onNext(response);
@@ -40,5 +40,3 @@ public class ComputeServiceImpl extends ComputeServiceGrpc.ComputeServiceImplBas
         }
     }
 }
-
-// ****************
