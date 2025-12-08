@@ -1,7 +1,6 @@
 package testharness;
 
 import java.io.File;
-import java.util.Objects;
 
 import network.UserComputeAPI;
 import network.JobRequest;

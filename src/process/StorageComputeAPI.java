@@ -1,7 +1,6 @@
 package process;
 
 import java.util.List;
-
 import project.annotations.ProcessAPI;
 
 @ProcessAPI

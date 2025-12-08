@@ -53,9 +53,6 @@ public class FastComputeEngineImpl implements ComputeEngineAPI {
 		}
 		int[] smallPrimes = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31};
 		for (int p : smallPrimes) {
-			if (n == p) {
-				return true;
-			}
 			if (n % p == 0) {
 				return false;
 			}
