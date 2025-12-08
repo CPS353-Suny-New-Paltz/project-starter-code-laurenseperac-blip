@@ -4,8 +4,6 @@ import org.junit.jupiter.api.Test;
 
 import conceptual.ComputeEngineAPI;
 import conceptual.ComputeRequest;
-import conceptual.ComputeResult;
-import process.DataValueImpl;
 import process.StorageComputeAPI;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

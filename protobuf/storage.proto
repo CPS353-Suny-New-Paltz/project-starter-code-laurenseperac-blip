@@ -8,7 +8,6 @@ service StorageService {
   rpc ReadAllInputs(ReadAllInputsRequest) returns (MultiDataValueResponse);
   rpc WriteAllOutputs(WriteAllOutputsRequest) returns (WriteResponse);
 
-  // Single value read/write (optional)
   rpc ReadInput(ReadInputRequest) returns (DataValueResponse);
   rpc WriteOutput(WriteOutputRequest) returns (WriteResponse);
 }

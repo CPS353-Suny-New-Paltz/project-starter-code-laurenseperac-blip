@@ -4,7 +4,6 @@ option java_package = "proto.network";
 option java_outer_classname = "NetworkProto";
 
 service NetworkService {
-  // Submit a job and wait for result (synchronous). Client gets final completion response.
   rpc SubmitJob (JobRequest) returns (JobResponse);
 }
 
